@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
+using System.Net;
 
 namespace SteelMusic
 {
@@ -37,25 +39,20 @@ namespace SteelMusic
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-            }
-
             app.UseStaticFiles();
 
-            //app.UseMvc(routes =>
-            //{
-            //    routes.MapRoute(
-            //        name: "default",
-            //        template: "{controller=Home}/{action=Index}/{id?}");
+            app.UseMvc();
 
-            //});
+            app.Run(async (context) =>
+            {
+                // This is just an easy way to redirect to the index.
+                if (!context.Request.Path.HasValue || context.Request.Path.Value == "/")
+                {
+                    context.Response.StatusCode = (int)HttpStatusCode.MovedPermanently;
+                    context.Response.Headers[HttpResponseHeader.Location.ToString()] = "/index.html";
+                    await context.Response.WriteAsync("");
+                }
+            });
         }
     }
 }
