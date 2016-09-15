@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
 using System.Net;
+using SteelMusic.Services;
 
 namespace SteelMusic
 {
@@ -31,6 +32,14 @@ namespace SteelMusic
         {
             // Add framework services.
             services.AddMvc();
+
+            services.AddSingleton<IAlbumService, AlbumService>(provider => {
+                AlbumService service = new AlbumService();
+
+                service.Load("Data/albums.json");
+
+                return service;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,19 +49,9 @@ namespace SteelMusic
             loggerFactory.AddDebug();
 
             app.UseStaticFiles();
+            app.UseDefaultFiles();
 
             app.UseMvc();
-
-            app.Run(async (context) =>
-            {
-                // This is just an easy way to redirect to the index.
-                if (!context.Request.Path.HasValue || context.Request.Path.Value == "/")
-                {
-                    context.Response.StatusCode = (int)HttpStatusCode.MovedPermanently;
-                    context.Response.Headers[HttpResponseHeader.Location.ToString()] = "/index.html";
-                    await context.Response.WriteAsync("");
-                }
-            });
         }
     }
 }
