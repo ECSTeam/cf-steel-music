@@ -1,0 +1,9 @@
+﻿---
+applications:
+- name: steel-music
+  memory: 512M
+  health-check-type: none
+  stack: cflinuxfs2
+  timeout: 120
+  buildpack: https://github.com/cloudfoundry-community/dotnet-core-buildpack.git
+  command: dotnet run ~/app/bin/Debug/netcoreapp1.0/SteelMusic.dll

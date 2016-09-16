@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
 using System.Net;
 using SteelMusic.Services;
+using System.Collections;
 
 namespace SteelMusic
 {
@@ -49,9 +50,22 @@ namespace SteelMusic
             loggerFactory.AddDebug();
 
             app.UseStaticFiles();
-            app.UseDefaultFiles();
 
-            app.UseMvc();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}");
+            });
+
+            loggerFactory.CreateLogger("Main").LogInformation("Starting Steel Music");
+            Console.WriteLine("[Console] Starting Steel Music");
+
+            foreach(DictionaryEntry pair in Environment.GetEnvironmentVariables())
+            {
+                Console.WriteLine("Env: {0} = \"{1}\"", pair.Key, pair.Value);
+            }
+
         }
     }
 }

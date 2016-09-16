@@ -1,10 +1,9 @@
 {
   "dependencies": {
     "Microsoft.NETCore.App": {
-      "version": "1.0.1",
+      "version": "1.0.0",
       "type": "platform"
     },
-    "Microsoft.AspNetCore.Diagnostics": "1.0.0",
     "Microsoft.AspNetCore.Mvc": "1.0.1",
     "Microsoft.AspNetCore.Razor.Tools": {
       "version": "1.0.0-preview2-final",
@@ -21,8 +20,7 @@
     "Microsoft.Extensions.Logging.Debug": "1.0.0",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0",
     "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0",
-    "angularjs": "1.5.8",
-    "Angular.UI": "0.4.0"
+    "Microsoft.AspNetCore.Diagnostics": "1.0.0"
   },
 
   "tools": {
@@ -34,13 +32,16 @@
   "frameworks": {
     "netcoreapp1.0": {
       "imports": [
-        "dotnet5.6",
-        "portable-net45+win8"
+        "portable-net45+wp80+win8+wpa81+dnxcore50"
       ]
     }
   },
 
   "buildOptions": {
+    "copyToOutput": {
+      "include": [ "wwwroot", "Data" ]
+    },
+    "debugType": "portable",
     "emitEntryPoint": true,
     "preserveCompilationContext": true
   },
@@ -56,11 +57,11 @@
       "wwwroot",
       "**/*.cshtml",
       "appsettings.json",
-      "web.config"
+      "web.config",
+      "Data"
     ]
   },
 
   "scripts": {
-    "postpublish": [ "dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%" ]
   }
 }

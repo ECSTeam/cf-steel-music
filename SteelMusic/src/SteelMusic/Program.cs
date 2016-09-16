@@ -13,6 +13,7 @@ namespace SteelMusic
         {
             var host = new WebHostBuilder()
                 .UseKestrel()
+                .UseUrls(new string[] { "http://*:8080" })
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>()
