@@ -11,18 +11,20 @@ using Microsoft.AspNetCore.Http;
 using System.Net;
 using SteelMusic.Services;
 using System.Collections;
+using SteelToe.Extensions.Configuration;
 
 namespace SteelMusic
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public Startup(IHostingEnvironment env, ILoggerFactory logFactory)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables();
+                .AddEnvironmentVariables()
+                .AddConfigServer(env, logFactory);
             Configuration = builder.Build();
         }
 
@@ -32,6 +34,7 @@ namespace SteelMusic
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
+            services.AddConfigServer(Configuration);
             services.AddMvc();
 
             services.AddSingleton<IAlbumService, AlbumService>(provider => {
